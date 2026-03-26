@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Estacionamento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h2>🚗 Estacionamento</h2>
+    
+    <form action="/cadastrar" method="POST">
+        <input type="text" name="placa" placeholder="Placa do Veículo" required>
+        <input type="text" name="modelo" placeholder="Modelo (ex: Gol)" required>
+        <input type="text" name="cor" placeholder="Cor" required>
+        <button type="submit">Registrar Entrada</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Placa</th>
+                <th>Modelo</th>
+                <th>Cor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for carro in carros %}
+            <tr>
+                <td>{{ carro[1] }}</td>
+                <td>{{ carro[2] }}</td>
+                <td>{{ carro[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
