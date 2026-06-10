@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2><i class="bi bi-graph-up"></i> Relatórios</h2>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5>Receita Total</h5>
+                <h2 class="text-success">R$ {{ "%.2f"|format(receita) }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5>Total de Registros</h5>
+                <h2 class="text-primary">{{ total_registros }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5>Movimentação Hoje</h5>
+                <h2 class="text-info">{{ hoje|length }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Veículos Mais Frequentes</h5>
+            </div>
+            <div class="card-body">
+                {% if frequentes %}
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Placa</th>
+                            <th>Modelo</th>
+                            <th>Visitas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for veiculo in frequentes %}
+                        <tr>
+                            <td><strong>{{ veiculo.placa }}</strong></td>
+                            <td>{{ veiculo.modelo }}</td>
+                            <td>{{ veiculo.total }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted">Sem dados.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Últimos Registros</h5>
+            </div>
+            <div class="card-body">
+                {% if hoje %}
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Placa</th>
+                            <th>Entrada</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for registro in hoje %}
+                        <tr>
+                            <td><strong>{{ registro.placa }}</strong></td>
+                            <td>{{ registro.data_entrada[:16] }}</td>
+                            <td>R$ {{ "%.2f"|format(registro.valor or 0) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted">Nenhum registro hoje.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

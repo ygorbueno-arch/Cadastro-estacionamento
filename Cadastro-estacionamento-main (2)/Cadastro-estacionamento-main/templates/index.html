@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stats-card" style="border-left-color: #28a745;">
+            <div class="card-body">
+                <h6>Vagas Livres</h6>
+                <h2>{{ stats.vagas_livres }}/{{ stats.vagas_total }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card" style="border-left-color: #dc3545;">
+            <div class="card-body">
+                <h6>Vagas Ocupadas</h6>
+                <h2>{{ stats.vagas_ocupadas }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card" style="border-left-color: #007bff;">
+            <div class="card-body">
+                <h6>Veículos no Pátio</h6>
+                <h2>{{ stats.veiculos_ativos }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card" style="border-left-color: #ffc107;">
+            <div class="card-body">
+                <h6>Receita Hoje</h6>
+                <h2>R$ {{ "%.2f"|format(stats.receita_hoje) }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Registrar Entrada -->
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <i class="bi bi-box-arrow-in-right"></i> Registrar Entrada
+    </div>
+    <div class="card-body">
+        <form action="/entrada" method="POST" class="row g-3">
+            <div class="col-md-8">
+                <input type="text" class="form-control form-control-lg" name="placa" 
+                       placeholder="Digite a placa (AAA-1234)" required>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-success btn-lg w-100">
+                    <i class="bi bi-check-circle"></i> Registrar Entrada
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Veículos Estacionados -->
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        <i class="bi bi-truck"></i> Veículos Estacionados
+    </div>
+    <div class="card-body">
+        {% if estacionados %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Placa</th>
+                        <th>Modelo</th>
+                        <th>Cor</th>
+                        <th>Vaga</th>
+                        <th>Entrada</th>
+                        <th>Tempo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for veiculo in estacionados %}
+                    <tr>
+                        <td><strong>{{ veiculo.placa }}</strong></td>
+                        <td>{{ veiculo.modelo }}</td>
+                        <td>{{ veiculo.cor }}</td>
+                        <td><span class="badge bg-primary">{{ veiculo.vaga_numero }}</span></td>
+                        <td>{{ veiculo.data_entrada[:16] }}</td>
+                        <td>{{ "%.1f"|format(veiculo.horas) }}h</td>
+                        <td>
+                            <a href="/saida/{{ veiculo.id }}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Registrar saída?')">
+                                <i class="bi bi-box-arrow-right"></i> Saída
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">Nenhum veículo estacionado no momento.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

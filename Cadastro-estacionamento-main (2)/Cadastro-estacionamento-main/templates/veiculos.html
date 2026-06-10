@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="bi bi-car-front"></i> Veículos</h2>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalVeiculo">
+        <i class="bi bi-plus-circle"></i> Novo Veículo
+    </button>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if veiculos %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Placa</th>
+                    <th>Modelo</th>
+                    <th>Marca</th>
+                    <th>Cor</th>
+                    <th>Ano</th>
+                    <th>Cliente</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for veiculo in veiculos %}
+                <tr>
+                    <td><strong>{{ veiculo.placa }}</strong></td>
+                    <td>{{ veiculo.modelo }}</td>
+                    <td>{{ veiculo.marca or '-' }}</td>
+                    <td>{{ veiculo.cor or '-' }}</td>
+                    <td>{{ veiculo.ano or '-' }}</td>
+                    <td>{{ veiculo.cliente_nome or '-' }}</td>
+                    <td>
+                        <a href="/veiculos/excluir/{{ veiculo.id }}" 
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Excluir veículo?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-center text-muted">Nenhum veículo cadastrado.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal Novo Veículo -->
+<div class="modal fade" id="modalVeiculo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/veiculos/novo" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Veículo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Placa *</label>
+                        <input type="text" class="form-control" name="placa" 
+                               placeholder="AAA-1234" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Modelo *</label>
+                        <input type="text" class="form-control" name="modelo" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Marca</label>
+                            <input type="text" class="form-control" name="marca">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ano</label>
+                            <input type="number" class="form-control" name="ano">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Cor</label>
+                            <select class="form-control" name="cor">
+                                <option value="">Selecione...</option>
+                                <option>Branco</option>
+                                <option>Preto</option>
+                                <option>Prata</option>
+                                <option>Vermelho</option>
+                                <option>Azul</option>
+                                <option>Outra</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tipo</label>
+                            <select class="form-control" name="tipo">
+                                <option value="carro">Carro</option>
+                                <option value="moto">Moto</option>
+                                <option value="caminhonete">Caminhonete</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cliente (opcional)</label>
+                        <select class="form-control" name="cliente_id">
+                            <option value="">Sem cliente</option>
+                            {% for cliente in clientes %}
+                            <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="bi bi-people"></i> Clientes</h2>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCliente">
+        <i class="bi bi-plus-circle"></i> Novo Cliente
+    </button>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if clientes %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Telefone</th>
+                    <th>Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.nome }}</td>
+                    <td>{{ cliente.cpf }}</td>
+                    <td>{{ cliente.telefone or '-' }}</td>
+                    <td>{{ cliente.email or '-' }}</td>
+                    <td>
+                        <a href="/clientes/excluir/{{ cliente.id }}" 
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Excluir cliente?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-center text-muted">Nenhum cliente cadastrado.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal Novo Cliente -->
+<div class="modal fade" id="modalCliente">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/clientes/novo" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nome *</label>
+                        <input type="text" class="form-control" name="nome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">CPF *</label>
+                        <input type="text" class="form-control" name="cpf" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telefone</label>
+                        <input type="text" class="form-control" name="telefone">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
